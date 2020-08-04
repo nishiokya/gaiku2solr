@@ -7,37 +7,11 @@ import json
 import sys
 import requests
 
-url = "http://localhost:8983/solr/techproducts/update?commit=true"
+url = "http://localhost:8983/solr/address/update?commit=true"
 method = "POST"
 additems = []
 
-def init():
 
-    schema = """
-    <field name="azaname" type="text_general" uninvertible="true" indexed="true" stored="true"/>
-    <field name="cityname" type="text_general" uninvertible="true" indexed="true" stored="true"/>
-    <field name="daihyo" type="pdouble" uninvertible="true" indexed="true" stored="true"/>
-    <field name="daihyou" type="plongs"/>
-    <field name="gaikuname" type="text_general" uninvertible="true" indexed="true" stored="true"/>
-    <field name="history1" type="pint" uninvertible="true" indexed="true" stored="true"/>
-    <field name="history2" type="pint" uninvertible="true" indexed="true" stored="true"/>
-    <field name="id" type="string" multiValued="false" indexed="true" required="true" stored="true"/>
-    <field name="jyuukyo" type="pint" uninvertible="true" indexed="true" stored="true"/>
-    <field name="lat" type="pdoubles" uninvertible="true" indexed="true" stored="true"/>
-    <field name="lon" type="pdouble" uninvertible="true" indexed="true" stored="true"/>
-    <field name="ooazaname" type="text_ja" uninvertible="true" indexed="true" stored="true"/>
-    <field name="prefname" type="text_general" uninvertible="true" indexed="true" stored="true"/>
-    <field name="x" type="pdouble" uninvertible="true" indexed="true" stored="true"/>
-    <field name="y" type="pdoubles" uninvertible="true" indexed="true" stored="true"/>
-    """
-
-    data = schema
-
-    headers = {"Content-Type" : "application/xml; charset=utf-8"}
-
-    request = requests.post(url, data=data, headers=headers)
-
-    response = request.xml()
 
 #with open("gomi", encoding='cp932') as f:
 with open("/Users/nishiokatakaaki/work/solr-8.2.0/23000-17.0a/23_2018.csv", encoding='cp932') as f:

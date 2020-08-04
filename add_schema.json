@@ -1,0 +1,94 @@
+{
+    "add-field": [{
+        "name": "prefname",
+        "type": "text_general",
+        "required": "true",
+        "stored": "true",
+        "indexed": "true"
+    },{
+        "name": "cityname",
+        "type": "text_general",
+        "required": "true",
+        "stored": "true",
+        "indexed": "true"
+    },{
+        "name": "ooazaname",
+        "type": "text_general",
+        "required": "true",
+        "stored": "true",
+        "indexed": "true"
+    },{
+        "name": "azaname",
+        "type": "text_general",
+        "required": "true",
+        "stored": "true",
+        "indexed": "true"
+    },{
+        "name": "gaikuname",
+        "type": "text_general",
+        "required": "true",
+        "stored": "true",
+        "indexed": "true"
+    },{
+        "name": "zahyo",
+        "type": "pint",
+        "required": "true",
+        "stored": "true",
+        "indexed": "true"
+    },{
+        "name": "x",
+        "type": "pdouble",
+        "required": "true",
+        "stored": "true",
+        "indexed": "true"
+    },{
+        "name": "y",
+        "type": "pdouble",
+        "required": "true",
+        "stored": "true",
+        "indexed": "true"
+    },{
+        "name": "lat",
+        "type": "pdouble",
+        "required": "true",
+        "stored": "true",
+        "indexed": "true"
+    },{
+        "name": "lon",
+        "type": "pdouble",
+        "required": "true",
+        "stored": "true",
+        "indexed": "true"
+    },{
+        "name": "jyuukyo",
+        "type": "pint",
+        "required": "true",
+        "stored": "true",
+        "indexed": "true"
+    },{
+        "name": "daihyo",
+        "type": "pint",
+        "required": "true",
+        "stored": "true",
+        "indexed": "true"
+    },{
+        "name": "history1",
+        "type": "pint",
+        "required": "true",
+        "stored": "true",
+        "indexed": "true"
+    },{
+        "name": "history2",
+        "type": "pint",
+        "required": "true",
+        "stored": "true",
+        "indexed": "true"
+    },{
+        "name": "lonlat",
+        "type": "point",
+        "required": "true",
+        "stored": "true",
+        "indexed": "true"
+    }
+]
+}
