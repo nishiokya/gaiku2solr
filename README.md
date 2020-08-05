@@ -1,15 +1,16 @@
 
 # gaiku2solr
 
-街区レベル位置参照情報をsolrに投入するスクリプト
+街区レベル位置参照情報を全文検索エンジンであるSolrに投入するスクリプト
 https://nlftp.mlit.go.jp/isj/index.html
 
+https://github.com/geolonia/japanese-addresses
 ## 使い方
-solr 8.1が起動されている
+solr 8.2で動作確認しています
 
 |  環境   |  設定 | 説明  | 
 | ---- | ---- |---- |
-|  環境   |  設定 | 説明  | 
+|  コレクション   |  address |   | 
 
 ### コレクションの作成
 
@@ -38,24 +39,7 @@ bin/solr create -c address -s 2 -rf 2
 
 #### スキーマ
 
-```
-<field name="azaname" type="text_general" uninvertible="true" indexed="true" stored="true"/>
-  <field name="cityname" type="text_general" uninvertible="true" indexed="true" stored="true"/>
-  <field name="daihyo" type="pdouble" uninvertible="true" indexed="true" stored="true"/>
-  <field name="gaikuname" type="text_general" uninvertible="true" indexed="true" stored="true"/>
-  <field name="history1" type="pint" uninvertible="true" indexed="true" stored="true"/>
-  <field name="history2" type="pint" uninvertible="true" indexed="true" stored="true"/>
-  <field name="id" type="string" multiValued="false" indexed="true" required="true" stored="true"/>
-  <field name="jyuukyo" type="pint" uninvertible="true" indexed="true" stored="true"/>
-  <field name="lat" type="pdoubles" uninvertible="true" indexed="true" stored="true"/>
-  <field name="lon" type="pdouble" uninvertible="true" indexed="true" stored="true"/>
-  <field name="lonlat" type="pint" uninvertible="true" indexed="true" stored="true"/>
-  <field name="ooazaname" type="text_ja" uninvertible="true" indexed="true" stored="true"/>
-  <field name="prefname" type="text_general" uninvertible="true" indexed="true" stored="true"/>
-  <field name="x" type="pdouble" uninvertible="true" indexed="true" stored="true"/>
-  <field name="y" type="pdoubles" uninvertible="true" indexed="true" stored="true"/>
-  <field name="zahyou" type="pint" uninvertible="true" indexed="true" stored="true"/>
-```
+
 
 ```
 curl -X POST -H 'Content-type:application/json' -d @add_schema.json  http://localhost:8983/solr/address/schema
@@ -63,9 +47,20 @@ curl -X POST -H 'Content-type:application/json' -d @add_schema.json  http://loca
 
 ```
 ### データの投入方法
+
+街区データを取得し、gen.pyのパスをいじる
 ```
 python gen.py
 ```
 
 ### 検索方法
 
+TBD
+
+
+
+## Resource
+
+以下を利用
+* [国土交通省位置参照情報ダウンロードサイト](https://nlftp.mlit.go.jp/cgi-bin/isj/dls/_choose_method.cgi)
+* [Geolonia 住所データ](https://github.com/geolonia/japanese-addresses)

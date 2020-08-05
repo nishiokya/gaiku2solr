@@ -89,6 +89,30 @@
         "required": "true",
         "stored": "true",
         "indexed": "true"
+    },{
+        "name": "prefcode",
+        "type": "string",
+        "required": "false",
+        "stored": "true",
+        "indexed": "true"
+    },{
+        "name": "citycode",
+        "type": "string",
+        "required": "false",
+        "stored": "true",
+        "indexed": "true"
+    },{
+        "name": "string",
+        "type": "point",
+        "required": "false",
+        "stored": "true",
+        "indexed": "true"
+    },{
+        "name": "address",
+        "type": "text_general",
+        "required": "true",
+        "stored": "true",
+        "indexed": "true"
     }
 ]
 }
