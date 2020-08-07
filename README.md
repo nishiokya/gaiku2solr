@@ -46,9 +46,18 @@ curl -X POST -H 'Content-type:application/json' -d @add_schema.json  http://loca
 
 
 ```
+### 位置参照情報のダウンロード方法データの投入方法
+
+令和元年の位置参照情報を都道府県ごとにダウンロードし、"data"ディレクトリは以下に配置します
+```
+python download.py
+```
+
 ### データの投入方法
 
-街区データを取得し、gen.pyのパスをいじる
+"data"ディレクトリは以下に配置されたcsvファイルを全て変換します
+また、[Geolonia 住所データ](https://github.com/geolonia/japanese-addresses)に存在する大字の場合市町村コードを付与します
+
 ```
 python gen.py
 ```

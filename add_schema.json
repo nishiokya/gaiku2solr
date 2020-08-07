@@ -20,7 +20,7 @@
     },{
         "name": "azaname",
         "type": "text_general",
-        "required": "true",
+        "required": "false",
         "stored": "true",
         "indexed": "true"
     },{
@@ -74,13 +74,13 @@
     },{
         "name": "history1",
         "type": "pint",
-        "required": "true",
+        "required": "false",
         "stored": "true",
         "indexed": "true"
     },{
         "name": "history2",
         "type": "pint",
-        "required": "true",
+        "required": "false",
         "stored": "true",
         "indexed": "true"
     },{
