@@ -11,6 +11,21 @@ import glob
 ooazadict = {}
 citydict = {}
 
+def deleteAll():
+
+    url = "http://localhost:8983/solr/address/update?commit=true"
+    method = "POST"
+    additems = []
+    #curl http://localhost:8080/solr/update -H "Content-type: text/xml" --data-binary '<delete><query>*:*</query></delete>'
+    data = '{ "delete": {"query":"*:*"} }'
+    #print(data)
+    headers = {"Content-Type" : "application/json; charset=utf-8"}
+
+    request = requests.post(url, data=data, headers=headers)
+
+    response = request.json()
+    print(response)
+
 def getAddressMaster():
     global ooazadict ,citydict
     url = "https://raw.githubusercontent.com/geolonia/japanese-addresses/master/data/latest.csv"
@@ -37,7 +52,7 @@ def getGaiku(filnename):
     #with open("gomi", encoding='cp932') as f:
     #<input type="button" align="center" value="ダウンロード済み" name="01000-18.0a" onclick="DownLd2('3.7MB','01000-18.0a.zip','
     # /isj/dls/data/18.0a/01000-18.0a.zip',this)">
-    with open(filnename, encoding='cp932') as f:
+    with open(filnename, encoding='utf-8') as f:
 
         reader = csv.reader(f)
         header = next(reader)
@@ -46,11 +61,12 @@ def getGaiku(filnename):
         
         for line in reader:
             
-            address = line[0]+line[1]+line[2]+line[4]
+            address = line[0]+line[1]+line[2]+line[3]+line[4]
+            ooaza = line[0]+line[1]+line[2]
             city = line[0]+line[1]
             #print(address)
             if address in ooazadict.keys():
-                acode = ooazadict[address]
+                acode = ooazadict[ooaza]
 
                 
                 item = {
@@ -140,6 +156,7 @@ def getGaiku(filnename):
 
 def main():
     getAddressMaster()
+    deleteAll()
     for filename in glob.glob("data/*.csv"):
         print("import : {}".format(filename))
         getGaiku(filename)
@@ -147,3 +164,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+#エラーデータ
+#{'responseHeader': {'rf': 1, 'status': 400, 'QTime': 19551}, 'error': {'metadata': ['error-class', 'org.apache.solr.common.SolrException', 'root-error-class', 'org.apache.solr.common.SolrException'], 'msg': '[doc=兵庫県神戸市西区井吹台北町五丁目] missing required field: gaikuname', 'code': 400}}
