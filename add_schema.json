@@ -20,7 +20,7 @@
     },{
         "name": "azaname",
         "type": "text_general",
-        "required": "false",
+        "required": "true",
         "stored": "true",
         "indexed": "true"
     },{
@@ -68,7 +68,7 @@
     },{
         "name": "daihyo",
         "type": "pint",
-        "required": "true",
+        "required": "false",
         "stored": "true",
         "indexed": "true"
     },{

@@ -96,6 +96,10 @@ def getGaiku(filnename):
                 
             elif city in citydict.keys():
                 acode = citydict[city]
+                if len(line) < 12:
+                    print(line)
+                    return
+
                 item = {
                     "id" : address,
                     "prefname":line[0],
