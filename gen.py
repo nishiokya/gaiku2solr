@@ -85,7 +85,7 @@ def getGaiku(filnename):
                     "daihyo":line[11],
                     #"history1":line[12],
                     #"history2":line[13],
-                    "lonlat":str(line[9])+","+str(line[8]),
+                    "latlon":str(line[8])+","+str(line[9]),
                     "prefcode":acode[0],
                     "citycode":acode[4],
                     "ooazacode":acode[8],
@@ -116,7 +116,7 @@ def getGaiku(filnename):
                     "daihyo":line[11],
                     #"history1":line[12],
                     #"history2":line[13],
-                    "lonlat":str(line[9])+","+str(line[8]),
+                    "latlon":str(line[8])+","+str(line[9]),
                     "prefcode":city[0],
                     "citycode":city[4],
                     #"ooazacode":acode[8],
@@ -140,7 +140,7 @@ def getGaiku(filnename):
                     "daihyo":line[11],
                     #"history1":line[12],
                     #"history2":line[13],
-                    "lonlat":str(line[9])+","+str(line[8]),
+                    "latlon":str(line[8])+","+str(line[9]),
                     
                     "address":address
 
@@ -155,7 +155,10 @@ def getGaiku(filnename):
     request = requests.post(url, data=data, headers=headers)
 
     response = request.json()
-    print(response)
+    #print(response)
+    with open("data_"+filnename[5:],"w", encoding='utf-8') as f:
+        for  value in additems.values:
+            f.write("\t".join(value))
 
 
 def main():

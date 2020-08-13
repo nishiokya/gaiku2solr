@@ -64,9 +64,12 @@ python gen.py
 
 ### 検索方法
 
-TBD
+愛知県の県庁(愛知県名古屋市中区三の丸三丁目1番2号)
+```
+http://localhost:8983/solr/address/select?q=address%3A愛知県名古屋市中区三の丸三丁目1番2号
+```
 
-
+http://localhost:8983/solr/address/select?q={!func}geodist()&point=136.908547,35.180373&sort=distance&sfield=lonlat
 
 ## Resource
 

@@ -84,7 +84,7 @@
         "stored": "true",
         "indexed": "true"
     },{
-        "name": "lonlat",
+        "name": "latlon",
         "type": "point",
         "required": "true",
         "stored": "true",
