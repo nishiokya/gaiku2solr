@@ -114,5 +114,18 @@
         "stored": "true",
         "indexed": "true"
     }
+    ,{
+        "name": "postcode",
+        "type": "string",
+        "required": "false",
+        "stored": "true",
+        "indexed": "true"
+    },{
+        "name": "yomi",
+        "type": "text_general",
+        "required": "false",
+        "stored": "true",
+        "indexed": "true"
+    }
 ]
 }

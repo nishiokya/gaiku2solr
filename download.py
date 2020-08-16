@@ -16,7 +16,7 @@ def csvreader(filename,outfile):
 version = "18.0a"
 os.system('rm tmp/*.csv' )
 for i in range(1,48):
-   url = "https://nlftp.mlit.go.jp//isj/dls/data/{0}/{1:02d}000-{0}.zip".format(version,i)
+   url = "https://nlftp.mlit.go.jp/isj/dls/data/{0}/{1:02d}000-{0}.zip".format(version,i)
    outfile = "{1:02d}000-{0}.csv".format(version,i)
    outzip = "data/{1:02d}000-{0}.zip".format(version,i)
    r = requests.get( url)

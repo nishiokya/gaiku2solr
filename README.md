@@ -64,12 +64,15 @@ python gen.py
 
 ### 検索方法
 
-愛知県の県庁(愛知県名古屋市中区三の丸三丁目1番2号)
+愛知県の県庁(愛知県名古屋市中区三の丸三丁目1番2号)のジオコーディング
 ```
 http://localhost:8983/solr/address/select?q=address%3A愛知県名古屋市中区三の丸三丁目1番2号
 ```
 
-http://localhost:8983/solr/address/select?q={!func}geodist()&point=136.908547,35.180373&sort=distance&sfield=lonlat
+愛知県の県庁のリバースジオコーディング
+```
+http://localhost:8983/solr/address/select?q={!func}geodist()&pt=35.180373,136.908547&sort=geodist() asc&sfield=latlon
+```
 
 ## Resource
 

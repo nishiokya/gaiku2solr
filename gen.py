@@ -10,21 +10,20 @@ import glob
 
 ooazadict = {}
 citydict = {}
+postdict = {}
 
-def deleteAll():
+coreurl = "http://localhost:8983/solr/address"
 
-    url = "http://localhost:8983/solr/address/update?commit=true"
-    method = "POST"
-    additems = []
-    #curl http://localhost:8080/solr/update -H "Content-type: text/xml" --data-binary '<delete><query>*:*</query></delete>'
-    data = '{ "delete": {"query":"*:*"} }'
-    #print(data)
-    headers = {"Content-Type" : "application/json; charset=utf-8"}
-
-    request = requests.post(url, data=data, headers=headers)
-
-    response = request.json()
-    print(response)
+def getPostMaster():
+    filnename = "data/KEN_ALL.CSV"
+    with open(filnename, encoding='sjis') as f:
+        reader = csv.reader(f)
+        header = next(reader)
+        for line in reader:
+            #print(line)
+            ooaza = line[6]+line[7]+line[8]
+            postdict[ooaza] = line
+        
 
 def getAddressMaster():
     global ooazadict ,citydict
@@ -34,18 +33,18 @@ def getAddressMaster():
     reader = csv.reader(r.text.splitlines())
     header = next(reader)
     for line in reader:
-        #print(line[9])
-        address = line[1]+line[5]+line[9]
+        #print(line)
+        ooaza = line[1]+line[5]+line[9]
         city = line[1]+line[5]
         #print(address)
-        ooazadict[address] = line
+        ooazadict[ooaza] = line
         citydict[city] = line
 
 def getGaiku(filnename):
-    global ooazadict ,citydict
+    global ooazadict ,citydict,postdict
     
 
-    url = "http://localhost:8983/solr/address/update?commit=true"
+    url = coreurl+ "/update?commit=true"
     method = "POST"
     additems = []
 
@@ -57,94 +56,71 @@ def getGaiku(filnename):
         reader = csv.reader(f)
         header = next(reader)
         i = 1
-        
-        
+        prefcode = filnename[5:7]
+  
         for line in reader:
             
             address = line[0]+line[1]+line[2]+line[3]+line[4]
             ooaza = line[0]+line[1]+line[2]
             city = line[0]+line[1]
+            yomi = None
+            postcode = None
+            citycode = None
+            ooazacode = None
             #print(address)
-            if address in ooazadict.keys():
+            #JPMasterと大字レベルでマッチ
+            if ooaza in ooazadict.keys():
                 acode = ooazadict[ooaza]
-
+                prefcode = acode[0]
+                citycode = acode[4]
+                ooazacode = acode[8]
+                yomi = None
                 
-                item = {
-                    "id" : address,
-                    "prefname":line[0],
-                    "cityname":line[1],
-                    "ooazaname":line[2],
-                    "azaname":line[3],
-                    "gaikuname":line[4],
-                    "zahyo":line[5],
-                    "x":line[6],
-                    "y":line[7],
-                    "lat":line[8],
-                    "lon":line[9],
-                    "jyuukyo":line[10],
-                    "daihyo":line[11],
-                    #"history1":line[12],
-                    #"history2":line[13],
-                    "latlon":str(line[8])+","+str(line[9]),
-                    "prefcode":acode[0],
-                    "citycode":acode[4],
-                    "ooazacode":acode[8],
-                    "address":address
-
-                }
                 i+=1
-                
+            #JPMasterと市レベルでマッチ
             elif city in citydict.keys():
                 acode = citydict[city]
-                if len(line) < 12:
-                    print(line)
-                    return
+                prefcode = acode[0]
+                citycode = acode[4]
 
-                item = {
-                    "id" : address,
-                    "prefname":line[0],
-                    "cityname":line[1],
-                    "ooazaname":line[2],
-                    "azaname":line[3],
-                    "gaikuname":line[4],
-                    "zahyo":line[5],
-                    "x":line[6],
-                    "y":line[7],
-                    "lat":line[8],
-                    "lon":line[9],
-                    "jyuukyo":line[10],
-                    "daihyo":line[11],
-                    #"history1":line[12],
-                    #"history2":line[13],
-                    "latlon":str(line[8])+","+str(line[9]),
-                    "prefcode":city[0],
-                    "citycode":city[4],
-                    #"ooazacode":acode[8],
-                    "address":address
+            if ooaza in postdict.keys():
+                #print(postdict[ooaza])
+                zcode = postdict[ooaza]
+                postcode = zcode[2]
+                yomi = zcode[3]+ zcode[4]+ zcode[5]
+            
+            item = {
+                "id" : address,
+                "prefname":line[0],
+                "cityname":line[1],
+                "ooazaname":line[2],
+                "azaname":line[3],
+                "gaikuname":line[4],
+                "zahyo":line[5],
+                "x":line[6],
+                "y":line[7],
+                "lat":line[8],
+                "lon":line[9],
+                "jyuukyo":line[10],
+                "daihyo":line[11],
+                #"history1":line[12],
+                #"history2":line[13],
+                "latlon":str(line[8])+","+str(line[9]),
+                "address":address,
+                "prefcode":prefcode,
+                
 
-                }
-            else:
-                item = {
-                    "id" : address,
-                    "prefname":line[0],
-                    "cityname":line[1],
-                    "ooazaname":line[2],
-                    "azaname":line[3],
-                    "gaikuname":line[4],
-                    "zahyo":line[5],
-                    "x":line[6],
-                    "y":line[7],
-                    "lat":line[8],
-                    "lon":line[9],
-                    "jyuukyo":line[10],
-                    "daihyo":line[11],
-                    #"history1":line[12],
-                    #"history2":line[13],
-                    "latlon":str(line[8])+","+str(line[9]),
-                    
-                    "address":address
-
-                }
+            }
+            if citycode:
+                item["citycode"] = citycode
+            if ooazacode:
+                item["ooazacode"] = ooazacode
+            if yomi:
+                item["yomi"] = yomi
+            if postcode:
+                item["postcode"] = postcode
+            
+            
             additems.append((item))
                 #print(address)
             
@@ -157,11 +133,25 @@ def getGaiku(filnename):
     response = request.json()
     #print(response)
     with open("data_"+filnename[5:],"w", encoding='utf-8') as f:
-        for  value in additems.values:
-            f.write("\t".join(value))
+        for  value in additems:
+            f.write("\t".join(value.values())+"\n")
 
+def deleteAll():
+
+    data = "{'delete': {'query': '*:*'}}"
+
+    url = coreurl+ "/update?commit=true"
+    headers = {"Content-Type" : "application/json; charset=utf-8"}
+
+    request = requests.post(url, data=data, headers=headers)
+
+    request = requests.post(url)
+
+    response = request.text
+    print(response)
 
 def main():
+    getPostMaster()
     getAddressMaster()
     deleteAll()
     for filename in glob.glob("data/*.csv"):
