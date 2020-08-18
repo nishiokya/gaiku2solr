@@ -14,6 +14,35 @@ postdict = {}
 
 coreurl = "http://localhost:8983/solr/address"
 
+def yuragi(prefname,cityname,ooazaname):
+    postalLists = []
+    #大字なし対応
+    if ooazaname == "八幡浜市の次に番地がくる場合":
+        postalLists.append(prefname+cityname+"（大字なし）")
+    #丁目対応
+    choume = "[０-９|一二三四五六七八九十壱十百千万]丁目"
+    if ooazaname[-2:] == "丁目":
+        ooazaname_del = re.sub(choume, '', ooazaname)
+      
+        return prefname+cityname+ooazaname_del
+    
+    return None
+
+def postalYuragi(prefname,cityname,ooazaname):
+    postalLists = []
+    #大字なし対応
+    if ooazaname == "八幡浜市の次に番地がくる場合":
+        postalLists.append(prefname+cityname+"（大字なし）")
+    #丁目対応
+    choume = "[０-９|一二三四五六七八九十壱十百千万]丁目"
+    #if ooazaname[-2:] == "丁目":
+        #ooazaname_del = re.sub(choume, '', ooazaname)
+        #print(ooazaname_del)
+        #postalLists.append(prefname+cityname+ooazaname_del)
+
+    
+    return postalLists
+
 def getPostMaster():
     filnename = "data/KEN_ALL.CSV"
     with open(filnename, encoding='sjis') as f:
@@ -21,8 +50,12 @@ def getPostMaster():
         header = next(reader)
         for line in reader:
             #print(line)
-            ooaza = line[6]+line[7]+line[8]
-            postdict[ooaza] = line
+            postalkey = line[6]+line[7]+line[8]
+            postdict[postalkey] = line
+            postalLists = postalYuragi(line[6],line[7],line[8])
+            for postal in postalLists:
+                postdict[postal] = line
+            
         
 
 def getAddressMaster():
@@ -40,6 +73,11 @@ def getAddressMaster():
         ooazadict[ooaza] = line
         citydict[city] = line
 
+def makeAddress(line):
+    address = line[0]+line[1]+line[2]+line[3]+line[4]
+    if line[2]== "（大字なし）":
+        address = line[0]+line[1]+line[3]+line[4]
+    return address
 def getGaiku(filnename):
     global ooazadict ,citydict,postdict
     
@@ -60,7 +98,8 @@ def getGaiku(filnename):
   
         for line in reader:
             
-            address = line[0]+line[1]+line[2]+line[3]+line[4]
+            address = makeAddress(line)
+            addressid = line[0]+line[1]+line[2]+line[3]+line[4]
             ooaza = line[0]+line[1]+line[2]
             city = line[0]+line[1]
             yomi = None
@@ -74,10 +113,8 @@ def getGaiku(filnename):
                 prefcode = acode[0]
                 citycode = acode[4]
                 ooazacode = acode[8]
-                yomi = None
                 
-                i+=1
-            #JPMasterと市レベルでマッチ
+                
             elif city in citydict.keys():
                 acode = citydict[city]
                 prefcode = acode[0]
@@ -88,9 +125,19 @@ def getGaiku(filnename):
                 zcode = postdict[ooaza]
                 postcode = zcode[2]
                 yomi = zcode[3]+ zcode[4]+ zcode[5]
+            elif yuragi(line[0],line[1],line[2]) in postdict.keys():
+                #print(postdict[ooaza])
+                zcode = postdict[yuragi(line[0],line[1],line[2]) ]
+                postcode = zcode[2]
+                yomi = zcode[3]+ zcode[4]+ zcode[5]
+  
+            
+            if len(line) < 11:
+                print(line)
+                next
             
             item = {
-                "id" : address,
+                "id" : addressid,
                 "prefname":line[0],
                 "cityname":line[1],
                 "ooazaname":line[2],
@@ -107,7 +154,7 @@ def getGaiku(filnename):
                 #"history2":line[13],
                 "latlon":str(line[8])+","+str(line[9]),
                 "address":address,
-                "prefcode":prefcode,
+                "prefcode":prefcode
                 
 
             }
@@ -139,9 +186,10 @@ def getGaiku(filnename):
 def deleteAll():
 
     data = "{'delete': {'query': '*:*'}}"
+    print(data)
 
     url = coreurl+ "/update?commit=true"
-    headers = {"Content-Type" : "application/json; charset=utf-8"}
+    headers = {"Content-Type" : "application/json;"}
 
     request = requests.post(url, data=data, headers=headers)
 
