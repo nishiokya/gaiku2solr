@@ -136,6 +136,12 @@ def getGaiku(filnename):
                 print(line)
                 next
             
+            if len( line) <11 :
+                daihyo = ""
+                print(line)
+            else:
+                daihyo = line[11]
+            
             item = {
                 "id" : addressid,
                 "prefname":line[0],
@@ -149,7 +155,7 @@ def getGaiku(filnename):
                 "lat":line[8],
                 "lon":line[9],
                 "jyuukyo":line[10],
-                "daihyo":line[11],
+                "daihyo":daihyo,
                 #"history1":line[12],
                 #"history2":line[13],
                 "latlon":str(line[8])+","+str(line[9]),
@@ -158,6 +164,7 @@ def getGaiku(filnename):
                 
 
             }
+            
             if citycode:
                 item["citycode"] = citycode
             if ooazacode:
