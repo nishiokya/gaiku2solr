@@ -136,7 +136,7 @@ def getGaiku(filnename):
                 print(line)
                 next
             
-            if len( line) <11 :
+            if len( line) <12 :
                 daihyo = ""
                 print(line)
             else:

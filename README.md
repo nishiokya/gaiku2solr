@@ -105,6 +105,7 @@ http://localhost:8983/solr/address/select?q={!func}geodist()&pt=35.180373,136.90
 
 ## 郵便番号がないの処理_
 - 一丁目をけずる
+- （１〜３丁目） を展開する
 - の次に番地がくる場合を直接地番とする
 ```
  217 愛媛県 八幡浜市 愛宕山
@@ -142,3 +143,13 @@ http://localhost:8983/solr/address/select?q={!func}geodist()&pt=35.180373,136.90
 38204,"796  ","7960000","ｴﾋﾒｹﾝ","ﾔﾜﾀﾊﾏｼ","ｲｶﾆｹｲｻｲｶﾞﾅｲﾊﾞｱｲ","愛媛県","八幡浜市","以下に掲載がない場合",0,0,0,0,0,0
 
 ```
+
+ # viewer
+
+https://pydeck.gl/installation.html
+ ```
+ pip install pydeck
+  pip install geopandas
+
+python viewer.py
+ ```
