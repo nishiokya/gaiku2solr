@@ -78,7 +78,7 @@ def makeAddress(line):
     if line[2]== "（大字なし）":
         address = line[0]+line[1]+line[3]+line[4]
     return address
-def getGaiku(filnename):
+def getGaiku(filnename,filedump=False):
     global ooazadict ,citydict,postdict
     
 
@@ -133,11 +133,12 @@ def getGaiku(filnename):
   
             
             if len(line) < 11:
-                print(line)
+                print("length is: {} {}",(len(line),line))
                 next
             
             if len( line) <12 :
                 daihyo = ""
+                print("length is: {} {}",(len(line),line))
                 print(line)
             else:
                 daihyo = line[11]
@@ -186,9 +187,10 @@ def getGaiku(filnename):
 
     response = request.json()
     #print(response)
-    with open("data_"+filnename[5:],"w", encoding='utf-8') as f:
-        for  value in additems:
-            f.write("\t".join(value.values())+"\n")
+    if filedump == True:
+        with open("tmp/post_data_"+filnename[5:],"w", encoding='utf-8') as f:
+            for  value in additems:
+                f.write("\t".join(value.values())+"\n")
 
 def deleteAll():
 
@@ -209,9 +211,9 @@ def main():
     getPostMaster()
     getAddressMaster()
     deleteAll()
-    for filename in glob.glob("data/*.csv"):
+    for filename in glob.glob("data/32*.csv"):
         print("import : {}".format(filename))
-        getGaiku(filename)
+        getGaiku(filename,filedump=False)
 
 
 if __name__ == "__main__":
