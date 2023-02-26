@@ -7,6 +7,7 @@ import json
 import sys
 import requests
 import glob
+import unicodedata
 
 ooazadict = {}
 citydict = {}
@@ -148,7 +149,7 @@ def getGaiku(filnename,filedump=False):
                 "prefname":line[0],
                 "cityname":line[1],
                 "ooazaname":line[2],
-                "azaname":line[3],
+                "azaname":" "  if line[3] is None else line[3],
                 "gaikuname":line[4],
                 "zahyo":line[5],
                 "x":line[6],
@@ -161,36 +162,39 @@ def getGaiku(filnename,filedump=False):
                 #"history2":line[13],
                 "latlon":str(line[8])+","+str(line[9]),
                 "address":address,
-                "prefcode":prefcode
+                "prefcode":prefcode,
+               # "display" : addressid,
                 
 
             }
+            #print(address)
             
             if citycode:
                 item["citycode"] = citycode
             if ooazacode:
                 item["ooazacode"] = ooazacode
             if yomi:
-                item["yomi"] = yomi
+
+                item["yomi"] = unicodedata.normalize('NFKC', yomi)
             if postcode:
                 item["postcode"] = postcode
             
             
             additems.append((item))
-                #print(address)
+                
             
-    data = json.dumps(additems).encode("utf-8")
-    #print(data)
-    headers = {"Content-Type" : "application/json; charset=utf-8"}
 
-    request = requests.post(url, data=data, headers=headers)
-
-    response = request.json()
-    #print(response)
     if filedump == True:
         with open("tmp/post_data_"+filnename[5:],"w", encoding='utf-8') as f:
             for  value in additems:
                 f.write("\t".join(value.values())+"\n")
+    else:
+        data = json.dumps(additems).encode("utf-8")
+        headers = {"Content-Type" : "application/json; charset=utf-8"}
+        request = requests.post(url, data=data, headers=headers)
+        response = request.json()
+
+        print(response)
 
 def deleteAll():
 
@@ -211,7 +215,7 @@ def main():
     getPostMaster()
     getAddressMaster()
     deleteAll()
-    for filename in glob.glob("data/32*.csv"):
+    for filename in glob.glob("data/*.csv"):
         print("import : {}".format(filename))
         getGaiku(filename,filedump=False)
 
