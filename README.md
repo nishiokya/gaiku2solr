@@ -1,22 +1,29 @@
 
 # gaiku2solr
 
-街区レベル位置参照情報を全文検索エンジンであるSolrに投入するスクリプト
-https://nlftp.mlit.go.jp/isj/index.html
+このスクリプトは、街区レベル位置参照情報を全文検索エンジンであるSolrに投入するためのものです。
+以下のウェブサイトから情報を取得します：[https://nlftp.mlit.go.jp/isj/index.html](https://nlftp.mlit.go.jp/isj/index.html) 
 
-https://github.com/geolonia/japanese-addresses
+ダウンロード部分は、Geolonia 住所データを参考にしています：[https://github.com/geolonia/japanese-addresses](https://github.com/geolonia/japanese-addresses) 
+
 ## 使い方
-solr 8.2で動作確認しています
+
+このスクリプトは、Solr 9.1で動作確認しています。
 
 |  環境   |  設定 | 説明  | 
 | ---- | ---- |---- |
-|  コレクション   |  address |   | 
+|  コレクション   |  address |  SolrのCollectionの名称です | 
 
+
+### 郵便番号データのダウンロード
+
+郵便番号データをダウンロードし、KEN_ALL.TSVを `data` フォルダに配置してください。データは、以下のウェブサイトから入手できます：[https://www.post.japanpost.jp/zipcode/dl/kogaki-zip.html](https://www.post.japanpost.jp/zipcode/dl/kogaki-zip.html) 
 ### コレクションの作成
 
-```
+```python
 bin/solr create -c address -s 2 -rf 2
 ```
+
 
 ### Abyssのスキーマの作成
 |  フィールド名   |  日本語名  | 説明  | サンプル  |
@@ -114,7 +121,7 @@ http://localhost:8983/solr/address/select?q={!func}geodist()&pt=35.180373,136.90
 
   14 愛媛県 八幡浜市 広瀬四丁目
 
-  (base) nishiokomacbook:gaiku_solr nishiokatakaaki$ iconv -f SJIS -t UTF-8 < data/KEN_ALL.csv | grep 八幡浜市 | grep 広瀬
+  (base) :gaiku_solr $ iconv -f SJIS -t UTF-8 < data/KEN_ALL.csv | grep 八幡浜市 | grep 広瀬
 38204,"796  ","7968002","ｴﾋﾒｹﾝ","ﾔﾜﾀﾊﾏｼ","ﾋﾛｾ","愛媛県","八幡浜市","広瀬",0,0,1,0,0,0
    4 愛媛県 八幡浜市 旭町一丁目
    4 愛媛県 八幡浜市 旭町三丁目
@@ -149,7 +156,7 @@ http://localhost:8983/solr/address/select?q={!func}geodist()&pt=35.180373,136.90
 https://pydeck.gl/installation.html
  ```
  pip install pydeck
-  pip install geopandas
+ pip install geopandas
 
 python viewer.py
  ```
