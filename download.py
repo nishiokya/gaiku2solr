@@ -13,7 +13,7 @@ def csvreader(filename,outfile):
          for s in f:
             w.write(s.decode('CP932'))
    
-version = "18.0a"
+version = "20.0a"
 os.system('rm tmp/*.csv' )
 for i in range(1,48):
    url = "https://nlftp.mlit.go.jp/isj/dls/data/{0}/{1:02d}000-{0}.zip".format(version,i)
