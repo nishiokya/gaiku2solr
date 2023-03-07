@@ -20,7 +20,7 @@
     },{
         "name": "azaname",
         "type": "text_general",
-        "required": "true",
+        "required": "false",
         "stored": "true",
         "indexed": "true"
     },{

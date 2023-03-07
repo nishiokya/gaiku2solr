@@ -43,10 +43,11 @@ bin/solr create -c address -s 2 -rf 2
 |history1|更新前履歴フラグ|1：新規作成、2：名称変更、3：削除、0：変更なし（半角）|"0"|
 |history2|更新後履歴フラグ|1：新規作成、2：名称変更、3：削除、0：変更なし（半角）|"1"|
 |lonlat|緯度経度|||
-|display|連結した住所文字列|||
-|yomi|表示用の週初漏れ実|||
+|address|連結した住所文字列||東京都千代田区内幸町１丁目１−１ |
+|postcode|||100-0005|
+|yomi|読み||イタブシチョウ|
 
-#### スキーマ
+#### スキーマの作成
 
 
 
@@ -85,16 +86,55 @@ python gen.py
 
 ### 検索方法
 
+#### Geocoder
+
 愛知県の県庁（愛知県名古屋市中区三の丸三丁目1番2号）をジオコーディングする場合は、以下のようなURLを使用します。
 ```
 http://localhost:8983/solr/address/select?q=address%3A愛知県名古屋市中区三の丸三丁目1番2号
 ```
+
+#### Reverse Geocoder
 
 愛知県の県庁をリバースジオコーディングする場合は、以下のようなURLを使用します。
 ```
 http://localhost:8983/solr/address/select?q={!func}geodist()&pt=35.180373,136.908547&sort=geodist() asc&sfield=latlon
 ```
 
+#### Suggester
+
+solrconfig.xmlに以下の設定を追加します
+```
+
+  <!-- suggestコンポーネントの定義 -->
+<searchComponent name="suggest" class="solr.SuggestComponent">
+    <lst name="suggester">
+        <str name="name">japaneseSuggester</str>
+        <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+        <str name="dictionaryImpl">DocumentDictionaryFactory</str>
+        <str name="field">address</str>
+        <str name="suggestAnalyzerFieldType">text_ja</str>
+        <str name="buildOnStartup">false</str>
+        <str name="buildOnCommit">false</str>
+        <str name="suggest-accuracy">0.7</str>
+        <str name="suggest-fuzzy">true</str>
+        <str name="suggest-fuzzy-min-length">1</str>
+        <str name="highlight">false</str>
+    </lst>
+</searchComponent>
+  
+  <!-- suggestコンポーネントのリクエストハンドラへの追加 -->
+  <requestHandler name="/suggest" class="solr.SearchHandler" startup="lazy">
+    <lst name="defaults">
+      <str name="suggest">true</str>
+      <str name="suggest.count">10</str>
+      <str name="suggest.dictionary">japaneseSuggester</str>
+    </lst>
+    <arr name="components">
+      <str>suggest</str>
+    </arr>
+  </requestHandler>
+```
+http://localhost:8983/solr/address/suggest?suggest=true&suggest.build=true&suggest.dictionary=japaneseSuggester&suggest.q=愛知
 
 ## Resource
 
