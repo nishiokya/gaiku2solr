@@ -17,6 +17,7 @@
 
 ### 郵便番号データのダウンロード
 
+
 郵便番号データをダウンロードし、KEN_ALL.TSVを `data` フォルダに配置してください。データは、以下のウェブサイトから入手できます：[郵便番号データダウンロード](https://www.post.japanpost.jp/zipcode/dl/kogaki-zip.html) 
 ### コレクションの作成
 
@@ -81,7 +82,12 @@ python download.py
 
 
 ```
-python gen.py
+python convert_gaiku.py
+```
+
+テキストファイルを出力
+```
+python convert_gaiku.py --dump
 ```
 
 ### 検索方法
