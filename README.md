@@ -6,6 +6,9 @@
 
 ダウンロード部分は、Geolonia 住所データを参考にしています：[https://github.com/geolonia/japanese-addresses](https://github.com/geolonia/japanese-addresses) 
 
+
+
+
 ## 使い方
 
 このスクリプトは、Solr 9.1で動作確認しています。
@@ -14,6 +17,13 @@
 | ---- | ---- |---- |
 |  コレクション   |  address |  SolrのCollectionの名称です | 
 
+
+## Requirements
+- solr 9.1
+- Python 3.9.2
+## Note
+SolrのURLはSOLR_URL環境変数で指定します。
+Solrにデータを登録する際は、SolrのHTTP APIを使用します。HTTP APIの仕様については、[Solr Reference Guide](https://solr.apache.org/guide/solr/latest/index.html)を参照してください。
 
 ### 郵便番号データのダウンロード
 
